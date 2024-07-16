@@ -1,0 +1,19 @@
+{
+  "name": "mesto-project-ff",
+  "version": "0.0.1",
+  "description": "'learning platform'",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bolgrad1990/mesto-project-ff.git"
+  },
+  "author": "Denis Platonov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Bolgrad1990/mesto-project-ff/issues"
+  },
+  "homepage": "https://github.com/Bolgrad1990/mesto-project-ff#readme"
+}

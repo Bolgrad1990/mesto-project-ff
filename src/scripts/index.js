@@ -15,7 +15,7 @@ function createCard(item, deleteCard) {
 
   const buttonDel = cardElement.querySelector('.card__delete-button');
   buttonDel.addEventListener('click', deleteCard);
-
+ 
   return cardElement;
 }
 
@@ -27,6 +27,8 @@ function deleteCard(evt) {
 }
 
 // @todo: Вывести карточки на страницу
+//const addBtn = document.querySelector('.profile__add-button')
+//  addBtn.addEventListener('click', createCard);
 
   initialCards.forEach((item) => {
     const cardElement = createCard(item, deleteCard);
