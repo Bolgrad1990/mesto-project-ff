@@ -1,3 +1,5 @@
+import { openPoup, popupImg } from "./popup";
+
 export const initialCards = [
     {
       name: "Архыз",
@@ -25,6 +27,10 @@ export const initialCards = [
     }
 ];
 export const cardTemplate = document.querySelector('#card-template').content;
+const popupCapture = document.querySelector('.popup__image');
+const popupCaption = document.querySelector('.popup__caption');
+
+
 // @todo: Функция создания карточки
 
 export function createCard(item, deleteCard) {
@@ -57,7 +63,7 @@ export function deleteCard(evt) {
   evtTarg.remove();
 }
 
-function likeCard(evt) {
+export function likeCard(evt) {
   if (evt.target.classList.contains('card__like-button')) {
     evt.target.classList.toggle('card__like-button_is-active');  
   }

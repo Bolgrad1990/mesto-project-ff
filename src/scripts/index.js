@@ -3,18 +3,15 @@ import "../pages/index.css";
 import { initialCards,
          cardTemplate,
          createCard,
-         deleteCard
+         deleteCard,
+         likeCard
  } from "./cards";
 
 import { popupProfile, 
          popupCard, 
-         popupImg, 
-         popupCapture, 
-         popupCaption,  
-         removePopupImage, 
+         popupImg,                             
          openPoup, 
-         closePopup, 
-         popup
+         closePopup
          } from "./popup";
 
 
@@ -60,13 +57,14 @@ function handleFormSubmit(evt) {
   titleProfile.textContent = nameInput.value;
   descriptionProfile.textContent  = jobInput.value;
   closePopup(popupProfile)
+  lik
 }
 
 formProfile.addEventListener('submit', handleFormSubmit);
 
   // создание карточки по кнопке "Сохранить"
 
-function handleFormSave(evt) {
+export function handleFormSave(evt) {
   evt.preventDefault(); 
   const nameCard =  formCard.querySelector('[name="place-name"]').value;
   const linkCard = formCard.querySelector('[name="link"]').value;
@@ -83,7 +81,6 @@ function handleFormSave(evt) {
 }
 
 formCard.addEventListener('submit', handleFormSave);
-
 
 document.addEventListener('keydown', (evt) => {
   if(evt.key === 'Escape'){
