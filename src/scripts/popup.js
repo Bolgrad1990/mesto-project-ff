@@ -1,7 +1,7 @@
 export const popupProfile = document.querySelector('.popup_type_edit');
 export const popupCard = document.querySelector('.popup_type_new-card');
 export const popupImg = document.querySelector('.popup_type_image');
-export const popupCapture = document.querySelector('.popup__image')
+//export const popupCapture = document.querySelector('.popup__image')
 export const popupCaption = document.querySelector('.popup__caption')
 
 export const removePopupImage = popupImg.querySelector('.popup__close');
