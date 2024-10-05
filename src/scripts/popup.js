@@ -1,33 +1,25 @@
-export const popupProfile = document.querySelector('.popup_type_edit');
-export const popupCard = document.querySelector('.popup_type_new-card');
-export const popupImg = document.querySelector('.popup_type_image');
-export const removePopupImage = popupImg.querySelector('.popup__close');
-//export const popup = document.querySelector('.popup')
 
-export function openPoup(popup){
+export function openPopup(popup){
   popup.classList.add('popup_is-opened', 'popup_is-animated');
+  document.addEventListener('keydown', (evt) => {
+    if(evt.key === 'Escape'){
+      const openPopup = document.querySelector('.popup_is-opened')
+      closePopup(openPopup)
+    }
+  })
 }
 export function closePopup(popup){
   popup.classList.remove('popup_is-opened');
+  document.removeEventListener('keydown', (evt) => {
+    if(evt.key === 'Escape'){
+      const openPopup = document.querySelector('.popup_is-opened')
+      closePopup(openPopup)
+    }
+  })
 }
-
- removePopupImage.addEventListener('click', () => {
-  closePopup(popupImg)
- })
  
- popupProfile.addEventListener('click', (evt) => {
-  if(evt.currentTarget === evt.target) {
-    closePopup(popupProfile);
+export function closePopupByOverlay () {
+  if(evt.target === evt.currentTarget) {
+    closePopup(evt.target);
   }
-})
-popupCard.addEventListener('click', (evt) => {
-  if(evt.currentTarget === evt.target) {
-    closePopup(popupCard);
-  }
-})
-
-popupImg.addEventListener('click', (evt) => {
-  if(evt.currentTarget === evt.target) {
-    closePopup(popupImg);
-  }
-})
+}

@@ -1,5 +1,3 @@
-import { openPoup, popupImg } from "./popup";
-
 export const initialCards = [
     {
       name: "Архыз",
@@ -26,45 +24,3 @@ export const initialCards = [
       link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg",
     }
 ];
-export const cardTemplate = document.querySelector('#card-template').content;
-const popupCapture = document.querySelector('.popup__image');
-const popupCaption = document.querySelector('.popup__caption');
-
-
-// @todo: Функция создания карточки
-
-export function createCard(item, deleteCard) {
-  const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
-  const buttonOpenImage = cardElement.querySelector('.card__image'); 
- 
-  buttonOpenImage.addEventListener('click', () => {
-    popupCapture.src = item.link;
-    popupCapture.alt = item.name;
-    popupCaption.textContent = item.name;
-    openPoup(popupImg)
-  })
-  
-  cardElement.querySelector('.card__title').textContent = item.name;
-  const cardImg = cardElement.querySelector('.card__image');
-    cardImg.src = item.link;
-    cardImg.alt = item.name;
-
-  const buttonDel = cardElement.querySelector('.card__delete-button');
-  buttonDel.addEventListener('click', deleteCard);
-
-  const buttonLike = cardElement.querySelector('.card__like-button');
-  buttonLike.addEventListener('click', likeCard)
-
-  return cardElement;
-}
-
-export function deleteCard(evt) {
-  const evtTarg = evt.target.closest('.card');
-  evtTarg.remove();
-}
-
-export function likeCard(evt) {
-  if (evt.target.classList.contains('card__like-button')) {
-    evt.target.classList.toggle('card__like-button_is-active');  
-  }
-}
