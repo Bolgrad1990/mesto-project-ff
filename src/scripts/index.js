@@ -1,7 +1,7 @@
 import "../pages/index.css";
 import { initialCards } from "./cards";
-import { createCard, deleteCard } from "./card";
-import { openPopup, closePopup, closePopupByOverlay } from "./popup";
+import { createCard, deleteCard, likeCard } from "./card";
+import { openPopup, closePopup, closePopupByOverlay } from "./modal";
 
 const popupProfile = document.querySelector('.popup_type_edit');
 const popupCard = document.querySelector('.popup_type_new-card');
@@ -34,8 +34,8 @@ buttonOpenCard.addEventListener('click', () => {
 
 buttonOpenProfile.addEventListener('click', () => {
   openPopup(popupProfile);
-  nameInput.value = '';          
-  jobInput.value = ''; 
+  nameInput.value = titleProfile.textContent;          
+  jobInput.value = descriptionProfile.textContent; 
 })
 
 removePopupProfile.addEventListener('click', () => {
@@ -52,6 +52,7 @@ removePopupProfile.addEventListener('click', () => {
 
  function openPopupImg(capture, caption) {  
   popupCapture.src = capture;
+  popupCapture.alt = caption;
   popupCaption.textContent = caption;
   openPopup(popupImg);
 }
@@ -64,15 +65,13 @@ function profileFormSubmit(evt) {
 }
 formProfile.addEventListener('submit', profileFormSubmit);
 
-  // создание карточки по кнопке "Сохранить"
-
 function handleFormSave(evt) {
   evt.preventDefault(); 
   const name = nameCard.value;
   const link = linkCard.value;
-  const item = { name, link};
+  const item = { name, link };
 
-  const cardElement = createCard(item, deleteCard, openPopupImg);
+  const cardElement = createCard(item, deleteCard, openPopupImg, likeCard);
   cardContainer.prepend(cardElement);
   formCard.reset();
   closePopup(popupCard)
@@ -80,21 +79,7 @@ function handleFormSave(evt) {
 
 formCard.addEventListener('submit', handleFormSave);
 
-//Вывести карточки на страницу
-
 initialCards.forEach((item) => {
-  const cardElement = createCard(item, deleteCard, openPopupImg);
+  const cardElement = createCard(item, deleteCard, openPopupImg, likeCard);
   cardContainer.append(cardElement);
 })
-
-
-
-
-
-
-
-
-
-
-
-
