@@ -3,6 +3,7 @@ import { initialCards } from "./cards";
 import { createCard, deleteCard, likeCard } from "./card";
 import { openPopup, closePopup, closePopupByOverlay } from "./modal";
 
+const popups = document.querySelectorAll('.popup');
 const popupProfile = document.querySelector('.popup_type_edit');
 const popupCard = document.querySelector('.popup_type_new-card');
 const popupImg = document.querySelector('.popup_type_image');
@@ -39,7 +40,7 @@ buttonOpenProfile.addEventListener('click', () => {
 })
 
 removePopupProfile.addEventListener('click', () => {
-  closePopup(popupProfile)
+  closePopup(popupProfile);
  })
 
  removePopupCard.addEventListener('click', () => {
@@ -60,7 +61,7 @@ removePopupProfile.addEventListener('click', () => {
 function profileFormSubmit(evt) {
   evt.preventDefault(); 
   titleProfile.textContent = nameInput.value;
-  descriptionProfile.textContent  = jobInput.value;
+  descriptionProfile.textContent = jobInput.value;
   closePopup(popupProfile)
 }
 formProfile.addEventListener('submit', profileFormSubmit);
@@ -82,4 +83,8 @@ formCard.addEventListener('submit', handleFormSave);
 initialCards.forEach((item) => {
   const cardElement = createCard(item, deleteCard, openPopupImg, likeCard);
   cardContainer.append(cardElement);
+})
+
+popups.forEach((item) => {
+  item.addEventListener('click', closePopupByOverlay);
 })
