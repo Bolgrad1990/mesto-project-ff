@@ -18,11 +18,11 @@ const buttonOpenCard = document.querySelector('.profile__add-button');
 const removePopupProfile = popupProfile.querySelector('.popup__close');
 const removePopupCard = popupCard.querySelector('.popup__close');
 
-const formProfile = document.querySelector('[name="edit-profile"');
+const formProfile = document.querySelector('[name="edit-profile"]');
 const nameInput =  formProfile.querySelector('[name="name"]');
 const jobInput = formProfile.querySelector('[name="description"]');
 
-const formCard = document.querySelector('[name="new-place"');
+const formCard = document.querySelector('[name="new-place"]');
 const nameCard =  formCard.querySelector('[name="place-name"]');
 const linkCard = formCard.querySelector('[name="link"]');
 
