@@ -22,6 +22,7 @@ const formProfile = document.querySelector('[name="edit-profile"]');
 const nameInput =  formProfile.querySelector('[name="name"]');
 const jobInput = formProfile.querySelector('[name="description"]');
 
+
 const formCard = document.querySelector('[name="new-place"]');
 const nameCard =  formCard.querySelector('[name="place-name"]');
 const linkCard = formCard.querySelector('[name="link"]');
