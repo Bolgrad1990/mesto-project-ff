@@ -2,6 +2,7 @@ import "../pages/index.css";
 import { initialCards } from "./cards";
 import { createCard, deleteCard, likeCard } from "./card";
 import { openPopup, closePopup, closePopupByOverlay } from "./modal";
+import { enableValidation } from "./validation";
 
 const popups = document.querySelectorAll('.popup');
 const popupProfile = document.querySelector('.popup_type_edit');
@@ -22,13 +23,21 @@ const formProfile = document.querySelector('[name="edit-profile"]');
 const nameInput =  formProfile.querySelector('[name="name"]');
 const jobInput = formProfile.querySelector('[name="description"]');
 
-
 const formCard = document.querySelector('[name="new-place"]');
 const nameCard =  formCard.querySelector('[name="place-name"]');
 const linkCard = formCard.querySelector('[name="link"]');
 
 const titleProfile = document.querySelector('.profile__title');
 const descriptionProfile = document.querySelector('.profile__description');
+
+enableValidation({
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+});
 
 buttonOpenCard.addEventListener('click', () => {
   openPopup(popupCard);

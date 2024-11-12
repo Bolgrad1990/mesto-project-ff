@@ -21,26 +21,16 @@
   }
 }
 
-/*.popup__input:invalid {
-  border: 1px solid red; 
-} 
-
-.popup__input:valid {
-  border: 1px solid green;  
-}*/
-
 .popup__input_type_error {
   border-bottom-color: red;
-  
-
-  /* Нижняя рамка становится красной всякий раз, 
-  когда введённые данные некорректны */
 }
+
 .popup__input-error{
   color: red;
-
+  
 }
 .popup__input-error_active{
    color: red;
    font-size: 12px;
+   
 }
