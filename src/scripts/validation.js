@@ -18,17 +18,23 @@ const showInputError = (formElement, inputElement, errorMessage, options) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   inputElement.classList.add(options.inputErrorClass);
   errorElement.textContent = errorMessage;
-  errorElement.classList.add(options.inactiveButtonClass);
+  errorElement.classList.add(options.errorClass);
 }
 
 const hideInputError = (formElement, inputElement, options) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   inputElement.classList.remove(options.inputErrorClass);
-  errorElement.classList.remove(options.inactiveButtonClass);
+  errorElement.classList.remove(options.errorClass);
   errorElement.textContent = '';
 }
 
 const checkInputValidity = (formElement, inputElement, options) => {
+  if (inputElement.validity.patternMismatch) {
+    inputElement.setCustomValidity(inputElement.dataset.errorMessage);
+  } else {
+    inputElement.setCustomValidity("");
+  }
+
   if(!inputElement.validity.valid) {
     showInputError(formElement,inputElement,inputElement.validationMessage, options);
   } else {
@@ -49,7 +55,6 @@ const checkInputValidity = (formElement, inputElement, options) => {
 }
 
 export const enableValidation = (options) => {
-  // const inputError = form.querySelector(options.inputErrorClass)
   const inputList = Array.from(document.querySelectorAll(options.formSelector));
   inputList.forEach((formElement) => {
     formElement.addEventListener('submit', (evt) => {
@@ -59,6 +64,9 @@ export const enableValidation = (options) => {
   })
 }
 
-export const clearValidation = (formElement, option) => {
-
+export const clearValidation = (options) => {
+  const inputList = Array.from(document.querySelectorAll(options.formSelector));
+  inputList.forEach((formElement) => {
+    hideInputError(formElement, inputElement, options);
+  })
 }

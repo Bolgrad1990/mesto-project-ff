@@ -2,7 +2,7 @@ import "../pages/index.css";
 import { initialCards } from "./cards";
 import { createCard, deleteCard, likeCard } from "./card";
 import { openPopup, closePopup, closePopupByOverlay } from "./modal";
-import { enableValidation } from "./validation";
+import { enableValidation, clearValidation } from "./validation";
 
 const popups = document.querySelectorAll('.popup');
 const popupProfile = document.querySelector('.popup_type_edit');
@@ -35,9 +35,11 @@ enableValidation({
   inputSelector: '.popup__input',
   submitButtonSelector: '.popup__button',
   inactiveButtonClass: 'popup__button_disabled',
-  inputErrorClass: 'popup__input_type_error',
+  inputErrorClass: 'popup__input_type_error',  
   errorClass: 'popup__error_visible'
 });
+
+//clearValidation(formProfile, options)
 
 buttonOpenCard.addEventListener('click', () => {
   openPopup(popupCard);
@@ -72,7 +74,8 @@ function profileFormSubmit(evt) {
   evt.preventDefault(); 
   titleProfile.textContent = nameInput.value;
   descriptionProfile.textContent = jobInput.value;
-  closePopup(popupProfile)
+  closePopup(popupProfile);
+  clearValidation(popupProfile);
 }
 formProfile.addEventListener('submit', profileFormSubmit);
 

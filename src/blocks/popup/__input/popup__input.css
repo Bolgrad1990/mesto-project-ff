@@ -25,12 +25,13 @@
   border-bottom-color: red;
 }
 
-.popup__input-error{
+.popup__error_visible{
+  font-size: 12px;
+
   color: red;
-  
 }
-.popup__input-error_active{
+/*.popup__input-error_active{
    color: red;
    font-size: 12px;
    
-}
+}*/
