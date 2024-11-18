@@ -3,6 +3,7 @@ import { initialCards } from "./cards";
 import { createCard, deleteCard, likeCard } from "./card";
 import { openPopup, closePopup, closePopupByOverlay } from "./modal";
 import { enableValidation, clearValidation } from "./validation";
+import { getInitialCards } from "./api";
 
 const popups = document.querySelectorAll('.popup');
 const popupProfile = document.querySelector('.popup_type_edit');
@@ -96,6 +97,7 @@ formCard.addEventListener('submit', handleFormSave);
 initialCards.forEach((item) => {
   const cardElement = createCard(item, deleteCard, openPopupImg, likeCard);
   cardContainer.append(cardElement);
+  getInitialCards()
 })
 
 popups.forEach((item) => {

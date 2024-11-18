@@ -20,6 +20,12 @@
     line-height: 15px;
   }
 }
+.popup__field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  /*margin-block-end: 30px;*/
+}
 
 .popup__input_type_error {
   border-bottom-color: red;
@@ -27,7 +33,9 @@
 
 .popup__error_visible{
   font-size: 12px;
-
+  position: absolute;
+  top: 50px;
+  left: 0;
   color: red;
 }
 /*.popup__input-error_active{
