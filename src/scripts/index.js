@@ -1,9 +1,9 @@
 import "../pages/index.css";
-import { initialCards } from "./cards";
+//import { initialCards } from "./cards";
 import { createCard, deleteCard, likeCard } from "./card";
 import { openPopup, closePopup, closePopupByOverlay } from "./modal";
 import { enableValidation, clearValidation } from "./validation";
-import { getInitialCards } from "./api";
+import { loadCards, addNewCard, enterProfile } from "./api";
 
 const popups = document.querySelectorAll('.popup');
 const popupProfile = document.querySelector('.popup_type_edit');
@@ -30,6 +30,8 @@ const linkCard = formCard.querySelector('[name="link"]');
 
 const titleProfile = document.querySelector('.profile__title');
 const descriptionProfile = document.querySelector('.profile__description');
+
+
 
 enableValidation({
   formSelector: '.popup__form',
@@ -73,10 +75,16 @@ removePopupProfile.addEventListener('click', () => {
 
 function profileFormSubmit(evt) {
   evt.preventDefault(); 
-  titleProfile.textContent = nameInput.value;
-  descriptionProfile.textContent = jobInput.value;
-  closePopup(popupProfile);
-  clearValidation(popupProfile);
+   const btnSave = evt.target.querySelector('.popup__button');
+   btnSave.textContent = 'Сохранение...';
+ 
+  enterProfile(nameInput.value, jobInput.value).then((result) => {
+    titleProfile.textContent = result.value;
+    descriptionProfile.textContent = result.value;
+    
+    closePopup(popupProfile);
+    clearValidation(popupProfile);
+  });
 }
 formProfile.addEventListener('submit', profileFormSubmit);
 
@@ -84,22 +92,28 @@ function handleFormSave(evt) {
   evt.preventDefault(); 
   const name = nameCard.value;
   const link = linkCard.value;
-  const item = { name, link };
+  //const item = ;
 
-  const cardElement = createCard(item, deleteCard, openPopupImg, likeCard);
-  cardContainer.prepend(cardElement);
-  formCard.reset();
-  closePopup(popupCard)
+  addNewCard({ name, link }).then((result) => {
+    const cardElement = createCard(result, deleteCard, openPopupImg, likeCard);
+    cardContainer.prepend(cardElement);
+    formCard.reset();
+    closePopup(popupCard)
+  });
 }
 
 formCard.addEventListener('submit', handleFormSave);
 
-initialCards.forEach((item) => {
-  const cardElement = createCard(item, deleteCard, openPopupImg, likeCard);
-  cardContainer.append(cardElement);
-  getInitialCards()
+loadCards().then((data) => {
+    data.forEach((item) => {
+    const cardElement = createCard(item, deleteCard, openPopupImg, likeCard);
+    cardContainer.append(cardElement); 
+  })
 })
 
 popups.forEach((item) => {
   item.addEventListener('click', closePopupByOverlay);
 })
+
+//getInitialCards()
+//loadUserData()
