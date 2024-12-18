@@ -79,8 +79,8 @@ function profileFormSubmit(evt) {
    btnSave.textContent = 'Сохранение...';
  
   enterProfile(nameInput.value, jobInput.value).then((result) => {
-    titleProfile.textContent = result.value;
-    descriptionProfile.textContent = result.value;
+    titleProfile.textContent = result.name;
+    descriptionProfile.textContent = result.about;
     
     closePopup(popupProfile);
     clearValidation(popupProfile);
