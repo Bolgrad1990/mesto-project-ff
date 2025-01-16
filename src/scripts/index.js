@@ -1,14 +1,22 @@
 import "../pages/index.css";
-//import { initialCards } from "./cards";
-import { createCard, deleteCard, likeCard } from "./card";
+import { createCard, cardRemove } from "./card";
 import { openPopup, closePopup, closePopupByOverlay } from "./modal";
 import { enableValidation, clearValidation } from "./validation";
-import { loadCards, addNewCard, enterProfile } from "./api";
+import {
+         getUserData,
+         getAllCards, 
+         addNewCard,
+         enterProfile, 
+         cardDelete,
+         updateAvatar
+        } from "./api";
+//import { data } from "autoprefixer";
 
 const popups = document.querySelectorAll('.popup');
 const popupProfile = document.querySelector('.popup_type_edit');
 const popupCard = document.querySelector('.popup_type_new-card');
 const popupImg = document.querySelector('.popup_type_image');
+const popupAvatar = document.querySelector('.popup_type_avatar')
 const removePopupImage = popupImg.querySelector('.popup__close');
 
 const popupCapture = document.querySelector('.popup__image');
@@ -17,8 +25,12 @@ const cardContainer = document.querySelector('.places__list');
 
 const buttonOpenProfile = document.querySelector('.profile__edit-button');
 const buttonOpenCard = document.querySelector('.profile__add-button');
+
+
+ 
 const removePopupProfile = popupProfile.querySelector('.popup__close');
 const removePopupCard = popupCard.querySelector('.popup__close');
+const removePopupAvatar = popupAvatar.querySelector('.popup__close')
 
 const formProfile = document.querySelector('[name="edit-profile"]');
 const nameInput =  formProfile.querySelector('[name="name"]');
@@ -28,10 +40,15 @@ const formCard = document.querySelector('[name="new-place"]');
 const nameCard =  formCard.querySelector('[name="place-name"]');
 const linkCard = formCard.querySelector('[name="link"]');
 
+const formAvatar = document.querySelector('[name="edit-avatar"]');
+const imageAvatar = document.querySelector('.profile__avatar');
+const inputAvatar = formAvatar.querySelector('[name="avatar"]')
+
+
 const titleProfile = document.querySelector('.profile__title');
 const descriptionProfile = document.querySelector('.profile__description');
 
-
+let userId;
 
 enableValidation({
   formSelector: '.popup__form',
@@ -42,8 +59,6 @@ enableValidation({
   errorClass: 'popup__error_visible'
 });
 
-//clearValidation(formProfile, options)
-
 buttonOpenCard.addEventListener('click', () => {
   openPopup(popupCard);
 })
@@ -52,6 +67,10 @@ buttonOpenProfile.addEventListener('click', () => {
   openPopup(popupProfile);
   nameInput.value = titleProfile.textContent;          
   jobInput.value = descriptionProfile.textContent; 
+})
+
+imageAvatar.addEventListener('click', () => {
+  openPopup(popupAvatar)
 })
 
 removePopupProfile.addEventListener('click', () => {
@@ -66,6 +85,10 @@ removePopupProfile.addEventListener('click', () => {
   closePopup(popupImg)
  })
 
+ removePopupAvatar.addEventListener('click', () => {
+  closePopup(popupAvatar)
+ })
+
  function openPopupImg(capture, caption) {  
   popupCapture.src = capture;
   popupCapture.alt = caption;
@@ -78,7 +101,7 @@ function profileFormSubmit(evt) {
    const btnSave = evt.target.querySelector('.popup__button');
    btnSave.textContent = 'Сохранение...';
  
-  enterProfile(nameInput.value, jobInput.value).then((result) => {
+  enterProfile({name:nameInput.value, about:jobInput.value}).then((result) => {
     titleProfile.textContent = result.name;
     descriptionProfile.textContent = result.about;
     
@@ -88,14 +111,29 @@ function profileFormSubmit(evt) {
 }
 formProfile.addEventListener('submit', profileFormSubmit);
 
+function avatarFormSubmit(evt) {
+  evt.preventDefault(); 
+  const btnSave = evt.target.querySelector('.popup__button');
+  console.log(btnSave)
+  btnSave.textContent = 'Сохранение...';
+ 
+  updateAvatar(inputAvatar.value).then((result) => {
+    imageAvatar.style.backgroundImage = `url(${result.avatar})`
+    
+    closePopup(popupProfile);
+    clearValidation(popupProfile);
+    console.log('updateAvatar', result)
+  });
+}
+formAvatar.addEventListener('submit', avatarFormSubmit);
+
 function handleFormSave(evt) {
   evt.preventDefault(); 
   const name = nameCard.value;
-  const link = linkCard.value;
-  //const item = ;
+  const link = linkCard.value; 
 
   addNewCard({ name, link }).then((result) => {
-    const cardElement = createCard(result, deleteCard, openPopupImg, likeCard);
+    const cardElement = createCard(result, cardRemove, openPopupImg, userId);
     cardContainer.prepend(cardElement);
     formCard.reset();
     closePopup(popupCard)
@@ -104,10 +142,16 @@ function handleFormSave(evt) {
 
 formCard.addEventListener('submit', handleFormSave);
 
-loadCards().then((data) => {
-    data.forEach((item) => {
-    const cardElement = createCard(item, deleteCard, openPopupImg, likeCard);
-    cardContainer.append(cardElement); 
+Promise.all([getAllCards(), getUserData()])
+ .then(([dataCards, dataUser]) => {
+    userId = dataUser._id;
+    titleProfile.textContent = dataUser.name;
+    descriptionProfile.textContent = dataUser.about;
+    //imgProfile.style.backgroundImage = `url(${dataUser.avatar})`;
+
+    dataCards.forEach((item) => { 
+    const cardElement = createCard(item, cardRemove, openPopupImg, userId);
+    cardContainer.append(cardElement);   
   })
 })
 
@@ -115,5 +159,11 @@ popups.forEach((item) => {
   item.addEventListener('click', closePopupByOverlay);
 })
 
-//getInitialCards()
-//loadUserData()
+cardDelete(card)
+  .then((cardId) => {
+    cardRemove(cardId)
+  })
+
+
+
+

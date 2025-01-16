@@ -6,86 +6,104 @@ const config = {
   }
 }
 
-/*export const getInitialCards = () => {
-  return fetch(`${config.baseUrl}/cards`, {
-    headers: config.headers
-  })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-        return Promise.reject(`Ошибка: ${res.status}`);
-    })
-}*/
-/*export const getInitialCards = () => {
-  return fetch('https://nomoreparties.co/v1/pwff-cohort-1/cards', {
-    headers: {
-      authorization: 'ab110fa4-3c8e-4438-9600-a9b0eded5efd'
-    }
-  })
-    .then(res => res.json())
-    .then((data) => {
-      console.log(data);
-    });
-}*/
-
-export const loadCards = () => {
-  return fetch(`${config.baseUrl}/cards`, {
-    headers: config.headers
-  })
-  .then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-      return Promise.reject(`Что-то пошло не так: ${res.status}`);
-  })
+const handleResponse = (res) => {
+  if (res.ok) {
+    return res.json();
+  }
+    return Promise.reject(`Что-то пошло не так: ${res.status}`);
 }
 
-export const addNewCard = (data) => {
+//----------------запрос  данных пользователя   ----------
+
+export const getUserData = () => {
+  return fetch(`${config.baseUrl}/users/me`, {
+    headers: config.headers,
+  })
+  .then(handleResponse)
+}
+
+// ---------запрос всех крточек с сервера-------------
+
+export const getAllCards = () => {
+  return fetch(`${config.baseUrl}/cards`, {
+    headers: config.headers
+  })
+  .then(handleResponse)
+}
+
+// ------------передача данных создания новой карточки ------------ 
+
+export const addNewCard = ({name, link}) => {
   return fetch(`${config.baseUrl}/cards`, {
     method: 'POST',
     headers: config.headers,
     body: JSON.stringify({
-      name: data.name,
-      link: data.link
+      name,
+      link
     })
   })
-  .then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-      return Promise.reject(`Что-то пошло не так: ${res.status}`);
-  })
+  .then(handleResponse)
 }
 
+// ------------передача данных профиля ----------------
 
-/*export const loadUserData = () => {
-  return fetch('https://nomoreparties.co/v1/pwff-cohort-1/users/me', {
-    headers: {
-      authorization: 'ab110fa4-3c8e-4438-9600-a9b0eded5efd'
-    }
-  })
-  .then(res => res.json())
-  .then((data) => {
-    console.log(data);
-  });
-}*/
-
-export const enterProfile = ( name, about) => {
+export const enterProfile = ({name, about}) => {
   return fetch(`${config.baseUrl}/users/me`, {
     method: 'PATCH',
     headers: config.headers,
     body: JSON.stringify({
-      name: name,
-      about: about
+      name,
+      about
     })
   })
-  .then(res => res.json())
+  .then(handleResponse)
   .catch((err) => {
     console.log(err)
   })
 }
 
+ // --------запросы  установки  и снятия лайков
+
+export const likesAddCount = (cardId) => {
+ 
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: 'PUT',
+    headers: config.headers
+  })
+  .then(handleResponse)
+}
+
+
+export const likesDelete = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: 'DELETE',
+    headers: config.headers
+  })
+  .then(handleResponse)
+}
+
+// ---------------удаление карточки -----------
+
+export const cardDelete = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/${cardId}`, {
+    method: 'DELETE',
+    headers: config.headers
+  })
+  .then(handleResponse)
+}
+
+// ---------------- обновление аватара ---------
+
+export const updateAvatar = (avatar) => {
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
+      method: 'PATCH',
+      headers: config.headers,
+      body: JSON.stringify({
+       avatar
+      })
+  })
+  .then(handleResponse)
+}
 
   
 
