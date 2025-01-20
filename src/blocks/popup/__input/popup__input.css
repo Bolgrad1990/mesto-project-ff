@@ -33,7 +33,7 @@
 
 .popup__error_visible{
   font-size: 12px;
-  position: absolute;
+  /* position: absolute; */
   top: 50px;
   left: 0;
   color: red;

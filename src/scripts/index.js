@@ -42,6 +42,7 @@ const linkCard = formCard.querySelector('[name="link"]');
 
 const formAvatar = document.querySelector('[name="edit-avatar"]');
 const imageAvatar = document.querySelector('.profile__avatar');
+const imageProfile = document.querySelector('.profile__image');
 const inputAvatar = formAvatar.querySelector('[name="avatar"]')
 
 
@@ -98,12 +99,16 @@ removePopupProfile.addEventListener('click', () => {
 
 function profileFormSubmit(evt) {
   evt.preventDefault(); 
+   console.log('evt', evt)
    const btnSave = evt.target.querySelector('.popup__button');
    btnSave.textContent = 'Сохранение...';
  
-  enterProfile({name:nameInput.value, about:jobInput.value}).then((result) => {
+  enterProfile({name:nameInput.value, about:jobInput.value, avatar: imageProfile.value}).then((result) => {
     titleProfile.textContent = result.name;
     descriptionProfile.textContent = result.about;
+    imageProfile.style.backgroundImage = `url(${result.avatar})`
+
+    console.log(result.avatar)
     
     closePopup(popupProfile);
     clearValidation(popupProfile);
@@ -118,12 +123,14 @@ function avatarFormSubmit(evt) {
   btnSave.textContent = 'Сохранение...';
  
   updateAvatar(inputAvatar.value).then((result) => {
-    imageAvatar.style.backgroundImage = `url(${result.avatar})`
+    imageProfile.style.backgroundImage = `url(${result.avatar})`
     
-    closePopup(popupProfile);
-    clearValidation(popupProfile);
+    closePopup(popupAvatar);
+    clearValidation(popupAvatar);
     console.log('updateAvatar', result)
-  });
+   })//.then(() => {
+  //    enterProfile({name:nameInput.value, about:jobInput.value, avatar: imageProfile.value})
+  // })
 }
 formAvatar.addEventListener('submit', avatarFormSubmit);
 
@@ -147,7 +154,7 @@ Promise.all([getAllCards(), getUserData()])
     userId = dataUser._id;
     titleProfile.textContent = dataUser.name;
     descriptionProfile.textContent = dataUser.about;
-    //imgProfile.style.backgroundImage = `url(${dataUser.avatar})`;
+    imageProfile.style.backgroundImage = `url(${dataUser.avatar})`;
 
     dataCards.forEach((item) => { 
     const cardElement = createCard(item, cardRemove, openPopupImg, userId);
@@ -159,10 +166,7 @@ popups.forEach((item) => {
   item.addEventListener('click', closePopupByOverlay);
 })
 
-cardDelete(card)
-  .then((cardId) => {
-    cardRemove(cardId)
-  })
+
 
 
 

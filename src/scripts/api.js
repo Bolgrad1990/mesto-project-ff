@@ -47,15 +47,17 @@ export const addNewCard = ({name, link}) => {
 
 // ------------передача данных профиля ----------------
 
-export const enterProfile = ({name, about}) => {
+export const enterProfile = ({name, about, avatar}) => {
   return fetch(`${config.baseUrl}/users/me`, {
     method: 'PATCH',
     headers: config.headers,
     body: JSON.stringify({
       name,
-      about
+      about,
+      avatar
     })
   })
+
   .then(handleResponse)
   .catch((err) => {
     console.log(err)
@@ -80,6 +82,10 @@ export const likesDelete = (cardId) => {
     headers: config.headers
   })
   .then(handleResponse)
+  // .then ((data) => {
+  //   console.log('data', data._id)
+  // })
+  
 }
 
 // ---------------удаление карточки -----------
