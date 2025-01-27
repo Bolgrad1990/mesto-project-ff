@@ -1,6 +1,6 @@
 const hasInvalidInput = (inputList) => {
-  return inputList.some((formElement) => {
-    return !formElement.validity.valid;
+  return inputList.some((inputElement) => {
+    return !inputElement.validity.valid;
   })
 }
 
@@ -16,7 +16,6 @@ const toggleButtonState = (inputList, buttonElement, options) => {
 
 const showInputError = (formElement, inputElement, errorMessage, options) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-  console.log('errorEl', errorElement)
   inputElement.classList.add(options.inputErrorClass);
   errorElement.textContent = errorMessage;
   errorElement.classList.add(options.errorClass);
@@ -24,6 +23,11 @@ const showInputError = (formElement, inputElement, errorMessage, options) => {
 
 const hideInputError = (formElement, inputElement, options) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+  if (!errorElement) {
+    console.error(`Элемент ошибки для ${inputElement.id} не найден`);
+    return;
+  }
+
   inputElement.classList.remove(options.inputErrorClass);
   errorElement.classList.remove(options.errorClass);
   errorElement.textContent = '';
@@ -32,6 +36,7 @@ const hideInputError = (formElement, inputElement, options) => {
 const checkInputValidity = (formElement, inputElement, options) => {
   if (inputElement.validity.patternMismatch) {
     inputElement.setCustomValidity(inputElement.dataset.errorMessage);
+    
   } else {
     inputElement.setCustomValidity("");
   }
@@ -42,6 +47,7 @@ const checkInputValidity = (formElement, inputElement, options) => {
     hideInputError(formElement, inputElement, options);
   }
 }
+
  const setEventListeners = (formElement, options) => {
   const inputList = Array.from(formElement.querySelectorAll(options.inputSelector));
   const buttonElement = formElement.querySelector(options.submitButtonSelector);
@@ -65,9 +71,18 @@ export const enableValidation = (options) => {
   })
 }
 
+
 export const clearValidation = (options) => {
-  const inputList = Array.from(document.querySelectorAll(options.formSelector));
-  inputList.forEach((formElement) => {
+  const formList = Array.from(document.querySelectorAll(options.formSelector)); 
+
+  formList.forEach((formElement) => {
+    const inputList = Array.from(formElement.querySelectorAll(options.inputSelector));
+    const buttonElement = formElement.querySelector(options.submitButtonSelector);
+    
+  inputList.forEach((inputElement) => {
     hideInputError(formElement, inputElement, options);
-  })
+    inputElement.value = ''; 
+  });
+  toggleButtonState(inputList, buttonElement, options)
+ });
 }

@@ -59,33 +59,34 @@ export const enterProfile = ({name, about, avatar}) => {
   })
 
   .then(handleResponse)
-  .catch((err) => {
-    console.log(err)
-  })
 }
 
  // --------запросы  установки  и снятия лайков
 
-export const likesAddCount = (cardId) => {
+export const likesAddCount = (cardId, btnLike) => {
  
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: 'PUT',
     headers: config.headers
   })
   .then(handleResponse)
+  .then((data) => {
+    btnLike.classList.add('card__like-button_is-active');
+    return data;
+  })
 }
 
 
-export const likesDelete = (cardId) => {
+export const likesDelete = (cardId, btnLike) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: 'DELETE',
     headers: config.headers
   })
   .then(handleResponse)
-  // .then ((data) => {
-  //   console.log('data', data._id)
-  // })
-  
+  .then((data) => {
+    btnLike.classList.remove('card__like-button_is-active');
+    return data;
+  })
 }
 
 // ---------------удаление карточки -----------
