@@ -6,13 +6,13 @@ export function cardRemove(card) {
 }
 
 export function makeLikeCard(evt, cardId, likesNumber) {
-
    const btnLike = evt.target;
 
    if (btnLike.classList.contains('card__like-button_is-active')) {
       likesDelete(cardId, btnLike) 
       .then((data) => {
-      likesNumber.textContent = data.likes.length;
+        btnLike.classList.remove('card__like-button_is-active')
+        likesNumber.textContent = data.likes.length;
     })
       .catch((err) => {
       console.log(`Ошибка установки лайка: ${err}`);
@@ -20,6 +20,7 @@ export function makeLikeCard(evt, cardId, likesNumber) {
    } else { 
       likesAddCount(cardId, btnLike)
      .then((data) => {
+      btnLike.classList.add('card__like-button_is-active')
       likesNumber.textContent = data.likes.length;
     })
      .catch((err) => {
@@ -41,20 +42,15 @@ export function createCard( item, clickDeleteCard, openPopupImg, cardId ) {
   cardImg.alt = item.name;
 
   numberLike.textContent = item.likes.length;
-  cardElement._id = item._id;
+  cardElement._id = item._id;   
  
   if (item.owner._id !== cardId) {
        buttonDel.style.display = 'none';
   } 
 
-  if (item.likes.some((like) => {
-       like._id === cardId;
-    }
-  ))  {
-      numberLike.classList.add('card__like-button_is-active');
-    } 
-  
-    else {
+  if (item.likes.some((like) => like._id === cardId)) {
+    buttonLike.classList.add('card__like-button_is-active');
+  } 
       buttonDel.addEventListener('click', () => {     
         cardDelete(item._id).then(() => {
         clickDeleteCard(cardElement, item._id);
@@ -62,9 +58,7 @@ export function createCard( item, clickDeleteCard, openPopupImg, cardId ) {
        .catch((err) => {
         console.log(`Ошибка при удалении карточки: ${err}`);
       });
-    })
-    
-  }
+    }) 
 
       buttonLike.addEventListener('click', (evt) => {
       makeLikeCard(evt, item._id, numberLike)

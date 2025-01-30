@@ -61,24 +61,24 @@ enableValidation({
 });
 
 buttonOpenCard.addEventListener('click', () => {
-  clearValidation(enableValidation)
+  //clearValidation(enableValidation)
   openPopup(popupCard);
 })
 
 buttonOpenProfile.addEventListener('click', () => {
-  clearValidation(popupProfile);
+  //clearValidation(popupProfile);
   openPopup(popupProfile);
   nameInput.value = titleProfile.textContent;          
   jobInput.value = descriptionProfile.textContent; 
 })
 
 imageAvatar.addEventListener('click', () => {
-  clearValidation(enableValidation);
+  //clearValidation(enableValidation);
   openPopup(popupAvatar)
 })
 
 removePopupProfile.addEventListener('click', () => {
-  clearValidation(enableValidation);
+  //clearValidation(enableValidation);
   closePopup(popupProfile);
  })
 
