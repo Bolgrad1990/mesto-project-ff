@@ -70,10 +70,6 @@ export const likesAddCount = (cardId, btnLike) => {
     headers: config.headers
   })
   .then(handleResponse)
-  // .then((data) => {
-  //   btnLike.classList.add('card__like-button_is-active');
-  //   return data;
-  // })
 }
 
 
@@ -83,10 +79,6 @@ export const likesDelete = (cardId, btnLike) => {
     headers: config.headers
   })
   .then(handleResponse)
-  // .then((data) => {
-  //   btnLike.classList.remove('card__like-button_is-active');
-  //   return data;
-  // })
 }
 
 // ---------------удаление карточки -----------

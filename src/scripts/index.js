@@ -150,12 +150,17 @@ if (!btnLike || !btnLike.classList) {
   .then((data) => {
     btnLike.classList.toggle('card__like-button_is-active');
 
-    const likeCounter = btnLike.closest('.card').querySelector('.card__like-counter');
+    const card = btnLike.closest('.card');
+    if (!card) {
+      console.error('Карточка не найдена.');
+      return;
+    }
+
+    const likeCounter = card.querySelector('.card__like-number');
+    
     if (likeCounter) {
       likeCounter.textContent = data.likes.length;
-    } else {
-      console.error('Счётчик лайков не найден.');
-    }
+    } 
   })
   .catch((err) => {
     console.error(`Ошибка при обработке лайка: ${err}`);
