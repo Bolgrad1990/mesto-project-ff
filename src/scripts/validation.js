@@ -8,6 +8,11 @@ const toggleButtonState = (inputList, buttonElement, options) => {
   if(hasInvalidInput(inputList)) {
     buttonElement.disabled = true;
     buttonElement.classList.add(options.inactiveButtonClass);
+
+    // if(input1.value === '' || input2.value === '' ){
+
+    // }
+    
   } else {
     buttonElement.disabled = false;
     buttonElement.classList.remove(options.inactiveButtonClass);
@@ -72,17 +77,17 @@ export const enableValidation = (options) => {
 }
 
 
-export const clearValidation = (options) => {
-  const formList = Array.from(document.querySelectorAll(options.formSelector)); 
-
-  formList.forEach((formElement) => {
-    const inputList = Array.from(formElement.querySelectorAll(options.inputSelector));
-    const buttonElement = formElement.querySelector(options.submitButtonSelector);
+export const clearValidation = (formElement, options) => {
+  if (!options || typeof options.inputSelector === 'undefined') {
+    console.error('Invalid options object passed to clearValidation. Ensure inputSelector is defined.');
+    return;
+  }
+  const inputList = Array.from(formElement.querySelectorAll(options.inputSelector)); 
+  const buttonElement = formElement.querySelector(options.submitButtonSelector);
     
   inputList.forEach((inputElement) => {
     hideInputError(formElement, inputElement, options);
     inputElement.value = ''; 
   });
   toggleButtonState(inputList, buttonElement, options)
- });
-}
+ }

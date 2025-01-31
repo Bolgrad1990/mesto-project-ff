@@ -1,5 +1,5 @@
 import "../pages/index.css";
-import { createCard, cardRemove } from "./card";
+import { createCard, makeLikeCard } from "./card";
 import { openPopup, closePopup, closePopupByOverlay } from "./modal";
 import { enableValidation, clearValidation } from "./validation";
 import {
@@ -7,9 +7,10 @@ import {
          getAllCards, 
          addNewCard,
          enterProfile, 
-         updateAvatar
+         updateAvatar,
+         likesDelete,
+         likesAddCount
         } from "./api";
-//import { data } from "autoprefixer";
 
 const popups = document.querySelectorAll('.popup');
 const popupProfile = document.querySelector('.popup_type_edit');
@@ -24,8 +25,6 @@ const cardContainer = document.querySelector('.places__list');
 
 const buttonOpenProfile = document.querySelector('.profile__edit-button');
 const buttonOpenCard = document.querySelector('.profile__add-button');
-
-
  
 const removePopupProfile = popupProfile.querySelector('.popup__close');
 const removePopupCard = popupCard.querySelector('.popup__close');
@@ -51,34 +50,35 @@ const descriptionProfile = document.querySelector('.profile__description');
 
 let userId;
 
-enableValidation({
+const validationOptions = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
   submitButtonSelector: '.popup__button',
   inactiveButtonClass: 'popup__button_disabled',
   inputErrorClass: 'popup__input_type_error',  
   errorClass: 'popup__error_visible'
-});
+};
+
+enableValidation(validationOptions);
 
 buttonOpenCard.addEventListener('click', () => {
-  //clearValidation(enableValidation)
+  clearValidation(formCard, validationOptions)
   openPopup(popupCard);
 })
 
 buttonOpenProfile.addEventListener('click', () => {
-  //clearValidation(popupProfile);
+  clearValidation(formProfile, validationOptions)
   openPopup(popupProfile);
   nameInput.value = titleProfile.textContent;          
   jobInput.value = descriptionProfile.textContent; 
 })
 
 imageAvatar.addEventListener('click', () => {
-  //clearValidation(enableValidation);
+  clearValidation(formAvatar, validationOptions)
   openPopup(popupAvatar)
 })
 
 removePopupProfile.addEventListener('click', () => {
-  //clearValidation(enableValidation);
   closePopup(popupProfile);
  })
 
@@ -111,7 +111,6 @@ function profileFormSubmit(evt) {
     imageProfile.style.backgroundImage = `url(${result.avatar})`
     
     closePopup(popupProfile);
-    //clearValidation(popupProfile);
   })
   .catch((err) => {
     console.log(err)
@@ -140,13 +139,45 @@ function avatarFormSubmit(evt) {
 }
 formAvatar.addEventListener('submit', avatarFormSubmit);
 
+const handleLikeClick = (btnLike, cardId, isLiked) => {
+if (!btnLike || !btnLike.classList) {
+    console.error('Кнопка лайка не найдена или недоступна.');
+    return;
+  }
+
+  const callApi = isLiked ? likesDelete : likesAddCount;
+  callApi(cardId)
+  .then((data) => {
+    btnLike.classList.toggle('card__like-button_is-active');
+
+    const likeCounter = btnLike.closest('.card').querySelector('.card__like-counter');
+    if (likeCounter) {
+      likeCounter.textContent = data.likes.length;
+    } else {
+      console.error('Счётчик лайков не найден.');
+    }
+  })
+  .catch((err) => {
+    console.error(`Ошибка при обработке лайка: ${err}`);
+  });
+};
+
+const handleDeleteCard = (card, cardId) => {
+  cardDelete(cardId).then(() => {
+    card.remove();
+  })
+  .catch((err) => {
+    console.log(`Ошибка при удалении карточки: ${err}`);
+  });
+}
+
 function handleFormSave(evt) {
   evt.preventDefault(); 
   const name = nameCard.value;
   const link = linkCard.value; 
 
   addNewCard({ name, link }).then((result) => {
-    const cardElement = createCard(result, cardRemove, openPopupImg, userId);
+    const cardElement = createCard(result, handleDeleteCard, openPopupImg, handleLikeClick, userId);
     cardContainer.prepend(cardElement);
 
     formCard.reset();
@@ -169,7 +200,7 @@ Promise.all([getAllCards(), getUserData()])
     imageProfile.style.backgroundImage = `url(${dataUser.avatar})`;
 
     dataCards.forEach((item) => { 
-    const cardElement = createCard(item, cardRemove, openPopupImg, userId);
+    const cardElement = createCard(item, handleDeleteCard, openPopupImg, handleLikeClick, userId);
     cardContainer.append(cardElement);   
   })
 })
