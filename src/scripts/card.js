@@ -57,11 +57,12 @@ export function createCard( item, clickDeleteCard, openPopupImg, handleLikeClick
     buttonLike.classList.add('card__like-button_is-active');
   } 
       buttonDel.addEventListener('click', () => {     
-      clickDeleteCard(cardElement, item._id)
+      cardRemove(cardElement, item._id)
     }) 
 
       buttonLike.addEventListener('click', (evt) => {
-      handleLikeClick(evt.target, item._id, buttonLike.classList.contains('card__like-button_is-active'))
+      // handleLikeClick(evt.target, item._id, buttonLike.classList.contains('card__like-button_is-active'))
+       handleLikeClick(evt, item._id, numberLike)
     });
 
       cardImg.addEventListener('click', () => {

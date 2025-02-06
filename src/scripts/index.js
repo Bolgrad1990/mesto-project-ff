@@ -1,5 +1,5 @@
 import "../pages/index.css";
-import { createCard, makeLikeCard } from "./card";
+import { createCard, makeLikeCard, cardRemove } from "./card";
 import { openPopup, closePopup, closePopupByOverlay } from "./modal";
 import { enableValidation, clearValidation } from "./validation";
 import {
@@ -139,42 +139,42 @@ function avatarFormSubmit(evt) {
 }
 formAvatar.addEventListener('submit', avatarFormSubmit);
 
-const handleLikeClick = (btnLike, cardId, isLiked) => {
-if (!btnLike || !btnLike.classList) {
-    console.error('Кнопка лайка не найдена или недоступна.');
-    return;
-  }
+// const handleLikeClick = (btnLike, cardId, isLiked) => {
+// if (!btnLike || !btnLike.classList) {
+//     console.error('Кнопка лайка не найдена или недоступна.');
+//     return;
+//   }
 
-  const callApi = isLiked ? likesDelete : likesAddCount;
-  callApi(cardId)
-  .then((data) => {
-    btnLike.classList.toggle('card__like-button_is-active');
+//   const callApi = isLiked ? likesDelete : likesAddCount;
+//   callApi(cardId)
+//   .then((data) => {
+//     btnLike.classList.toggle('card__like-button_is-active');
 
-    const card = btnLike.closest('.card');
-    if (!card) {
-      console.error('Карточка не найдена.');
-      return;
-    }
+//     const card = btnLike.closest('.card');
+//     if (!card) {
+//       console.error('Карточка не найдена.');
+//       return;
+//     }
 
-    const likeCounter = card.querySelector('.card__like-number');
+//     const likeCounter = card.querySelector('.card__like-number');
     
-    if (likeCounter) {
-      likeCounter.textContent = data.likes.length;
-    } 
-  })
-  .catch((err) => {
-    console.error(`Ошибка при обработке лайка: ${err}`);
-  });
-};
+//     if (likeCounter) {
+//       likeCounter.textContent = data.likes.length;
+//     } 
+//   })
+//   .catch((err) => {
+//     console.error(`Ошибка при обработке лайка: ${err}`);
+//   });
+// };
 
-const handleDeleteCard = (card, cardId) => {
-  cardDelete(cardId).then(() => {
-    card.remove();
-  })
-  .catch((err) => {
-    console.log(`Ошибка при удалении карточки: ${err}`);
-  });
-}
+// const handleDeleteCard = (card, cardId) => {
+//   cardDelete(cardId).then(() => {
+//     card.remove();
+//   })
+//   .catch((err) => {
+//     console.log(`Ошибка при удалении карточки: ${err}`);
+//   });
+// }
 
 function handleFormSave(evt) {
   evt.preventDefault(); 
@@ -182,7 +182,7 @@ function handleFormSave(evt) {
   const link = linkCard.value; 
 
   addNewCard({ name, link }).then((result) => {
-    const cardElement = createCard(result, handleDeleteCard, openPopupImg, handleLikeClick, userId);
+    const cardElement = createCard(result, cardRemove, openPopupImg, makeLikeCard, userId);
     cardContainer.prepend(cardElement);
 
     formCard.reset();
@@ -205,7 +205,7 @@ Promise.all([getAllCards(), getUserData()])
     imageProfile.style.backgroundImage = `url(${dataUser.avatar})`;
 
     dataCards.forEach((item) => { 
-    const cardElement = createCard(item, handleDeleteCard, openPopupImg, handleLikeClick, userId);
+    const cardElement = createCard(item, cardRemove, openPopupImg, makeLikeCard, userId);
     cardContainer.append(cardElement);   
   })
 })
